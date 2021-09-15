@@ -27,6 +27,8 @@ class Books {
   }
 }
 
+const books = new Books();
+
 function displayArticle(book) {
   const article = document.createElement('article');
   article.setAttribute('id', `article-${book.id}`);
@@ -36,7 +38,7 @@ function displayArticle(book) {
   const author = document.createElement('p');
   author.textContent = book.author;
   article.appendChild(author);
-  let remButton = document.createElement('button');
+  const remButton = document.createElement('button');
   remButton.classList.add('remove-btn');
   remButton.textContent = 'Remove';
   remButton.addEventListener('click', () => {
@@ -64,8 +66,6 @@ function createArticle(books, title, author) {
     localStorage.setItem('books', JSON.stringify(book.list));
   }
 }
-
-let books = new Books();
 
 const titleIn = document.querySelector('#title');
 const authorIn = document.querySelector('#author');
