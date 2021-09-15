@@ -1,8 +1,15 @@
 const container = document.querySelector('#books-list');
 
+function removeBook(books, index) {
+  const art = document.querySelector(`#article-${index}`);
+  art.remove();
+  books.splice(index, 1);
+  localStorage.setItem('books', JSON.stringify(books));
+}
+
 function createArticle(books, index) {
   const article = document.createElement('article');
-  article.setAttribute('id', 'article-' + index);
+  article.setAttribute('id', `article-${index}`);
   const title = document.createElement('p');
   title.textContent = books[index].title;
   article.appendChild(title);
@@ -20,10 +27,10 @@ function createArticle(books, index) {
 }
 
 function addBook(books, title, author) {
-  if (title != '' && author != '') {
+  if (title !== '' && author !== '') {
     const book = {
-      title: title,
-      author: author
+      title,
+      author,
     };
     books.push(book);
     createArticle(books, books.length - 1);
@@ -38,13 +45,6 @@ function displayBooksList(books) {
 }
 
 let books = [];
-
-function removeBook(books, index) {
-  const art = document.querySelector('#article-' + index);
-  art.remove();
-  books.splice(index, 1);
-  localStorage.setItem('books', JSON.stringify(books));
-}
 
 const titleIn = document.querySelector('#title');
 const authorIn = document.querySelector('#author');
@@ -61,5 +61,5 @@ if (localStorage.getItem('books') !== null) {
 
 // const removeButtons = document.querySelectorAll();
 // for (let i = 0; i < removeButtons.length; i += 1) {
-  
+
 // }
