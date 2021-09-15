@@ -12,7 +12,7 @@ function createArticle(books, index) {
   const button = document.createElement('button');
   button.classList.add('remove-btn');
   button.textContent = 'Remove';
-  button.addEventListener('click', () => { 
+  button.addEventListener('click', () => {
     article.remove();
     books.splice(index, 1);
     localStorage.setItem('books', JSON.stringify(books));
