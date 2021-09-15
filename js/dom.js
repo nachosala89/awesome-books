@@ -1,12 +1,5 @@
 const container = document.querySelector('#books-list');
 
-function removeBook(books, index) {
-  const art = document.querySelector(`#article-${index}`);
-  art.remove();
-  books.splice(index, 1);
-  localStorage.setItem('books', JSON.stringify(books));
-}
-
 function createArticle(books, index) {
   const article = document.createElement('article');
   article.setAttribute('id', `article-${index}`);
@@ -19,7 +12,11 @@ function createArticle(books, index) {
   const button = document.createElement('button');
   button.classList.add('remove-btn');
   button.textContent = 'Remove';
-  button.addEventListener('click', () => { removeBook(books, index); });
+  button.addEventListener('click', () => { 
+    article.remove();
+    books.splice(index, 1);
+    localStorage.setItem('books', JSON.stringify(books));
+  });
   article.appendChild(button);
   const hr = document.createElement('hr');
   article.appendChild(hr);
@@ -58,8 +55,3 @@ if (localStorage.getItem('books') !== null) {
     displayBooksList(books);
   });
 }
-
-// const removeButtons = document.querySelectorAll();
-// for (let i = 0; i < removeButtons.length; i += 1) {
-
-// }
