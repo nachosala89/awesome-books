@@ -2,8 +2,7 @@
 const container = document.querySelector('#books-list');
 
 class Book {
-  constructor(id, title, author) {
-    this.id = id;
+  constructor(title, author) {
     this.title = title;
     this.author = author;
   }
@@ -15,15 +14,18 @@ class Books {
   }
 
   addBook(book) {
-    this.list.push(book);
+    this.list = [...this.list, book];
   }
 
   removeBook(book) {
-    this.list.splice(this.list.indexOf(book), 1);
+    // this.list.splice(this.list.indexOf(book), 1);
+    const oldList = this.list;
+    const index = this.list.indexOf(book);
+    this.list = [...oldList.slice(0, index), ...oldList.slice(index + 1)];
   }
 
   copyList(list) {
-    this.list = list;
+    this.list = [...list];
   }
 }
 
@@ -31,7 +33,6 @@ const books = new Books();
 
 function displayArticle(book) {
   const article = document.createElement('article');
-  article.setAttribute('id', `article-${book.id}`);
   const title = document.createElement('p');
   title.textContent = book.title;
   article.appendChild(title);
@@ -60,10 +61,10 @@ function displayBooksList(books) {
 
 function createArticle(books, title, author) {
   if (title !== '' && author !== '') {
-    const book = new Book(books.length, title, author);
+    const book = new Book(title, author);
     books.addBook(book);
     displayArticle(book);
-    localStorage.setItem('books', JSON.stringify(book.list));
+    localStorage.setItem('books', JSON.stringify(books.list));
   }
 }
 
