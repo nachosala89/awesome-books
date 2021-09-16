@@ -18,7 +18,6 @@ class Books {
   }
 
   removeBook(book) {
-    // this.list.splice(this.list.indexOf(book), 1);
     const oldList = this.list;
     const index = this.list.indexOf(book);
     this.list = [...oldList.slice(0, index), ...oldList.slice(index + 1)];
@@ -33,23 +32,25 @@ const books = new Books();
 
 function displayArticle(book) {
   const article = document.createElement('article');
-  const title = document.createElement('p');
-  title.textContent = book.title;
-  article.appendChild(title);
-  const author = document.createElement('p');
-  author.textContent = book.author;
-  article.appendChild(author);
+  article.classList.add('d-flex', 'justify-content-between', 'align-items-center', 'p-2');
+  const text = document.createElement('span');
+  text.textContent = `"${book.title}" by ${book.author}`;
+  text.classList.add('fw-bold');
+  article.appendChild(text);
   const remButton = document.createElement('button');
+  const divBtn = document.createElement('div');
   remButton.classList.add('remove-btn');
   remButton.textContent = 'Remove';
   remButton.addEventListener('click', () => {
     article.remove();
     books.removeBook(book);
     localStorage.setItem('books', JSON.stringify(books.list));
+    if (books.list.length === 0) {
+      container.classList.add('d-none');
+    }
   });
-  article.appendChild(remButton);
-  const hr = document.createElement('hr');
-  article.appendChild(hr);
+  divBtn.appendChild(remButton);
+  article.appendChild(divBtn);
   container.appendChild(article);
 }
 
@@ -61,6 +62,9 @@ function displayBooksList(books) {
 
 function createArticle(books, title, author) {
   if (title !== '' && author !== '') {
+    if (books.list.length === 0) {
+      container.classList.remove('d-none');
+    }
     const book = new Book(title, author);
     books.addBook(book);
     displayArticle(book);
@@ -74,10 +78,11 @@ const button = document.querySelector('#add-btn');
 
 button.addEventListener('click', () => { createArticle(books, titleIn.value, authorIn.value); });
 
-if (localStorage.getItem('books') !== null) {
-  window.addEventListener('load', () => {
-    const storedList = JSON.parse(localStorage.getItem('books'));
+window.addEventListener('load', () => {
+  const storedList = JSON.parse(localStorage.getItem('books'));
+  if (storedList.length > 0) {
     books.copyList(storedList);
     displayBooksList(books);
-  });
-}
+    container.classList.remove('d-none');
+  }
+});

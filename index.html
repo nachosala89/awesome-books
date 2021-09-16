@@ -9,15 +9,21 @@
   <title>Document</title>
 </head>
 <body>
-  <h1>Awesome books</h1>
-  <div id="books-list"></div>
-  <form>
-    <input type="text" name="title" id="title" placeholder="Title">
-    <br>
-    <input type="text" name="author" id="author" placeholder="Author">
-    <br>
-    <button type="button" id="add-btn">Add</button>
-  </form>
+  <section id="headline" class="container d-flex flex-column align-items-center">
+    <h1>All awesome books</h1>
+    <div id="books-list" class="container col-lg-7 mt-2 p-0 d-none"></div>
+  </section>
+  <hr class='mx-auto my-5 col-3'>
+  <section id="add-book" class="container d-flex flex-column align-items-center">
+    <h2>Add a new book</h2>
+    <form>
+      <input class="my-2" type="text" name="title" id="title" placeholder="Title">
+      <br>
+      <input class="my-2" type="text" name="author" id="author" placeholder="Author">
+      <br>
+      <button class="my-2 float-end" type="button" id="add-btn">Add</button>
+    </form>
+  </section>
   <script src="./js/dom.js"></script>
 </body>
 </html>
