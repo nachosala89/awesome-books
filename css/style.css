@@ -1,3 +1,11 @@
 body {
   margin: 20px;
 }
+
+#books-list {
+  border: 2px solid black;
+}
+
+article:nth-child(odd) {
+  background-color: #ccc;
+}
