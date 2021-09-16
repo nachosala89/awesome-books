@@ -1,57 +1,83 @@
+/* eslint-disable max-classes-per-file */
 const container = document.querySelector('#books-list');
 
-function createArticle(books, index) {
+class Book {
+  constructor(title, author) {
+    this.title = title;
+    this.author = author;
+  }
+}
+
+class Books {
+  constructor() {
+    this.list = [];
+  }
+
+  addBook(book) {
+    this.list = [...this.list, book];
+  }
+
+  removeBook(book) {
+    // this.list.splice(this.list.indexOf(book), 1);
+    const oldList = this.list;
+    const index = this.list.indexOf(book);
+    this.list = [...oldList.slice(0, index), ...oldList.slice(index + 1)];
+  }
+
+  copyList(list) {
+    this.list = [...list];
+  }
+}
+
+const books = new Books();
+
+function displayArticle(book) {
   const article = document.createElement('article');
-  article.setAttribute('id', `article-${index}`);
   const title = document.createElement('p');
-  title.textContent = books[index].title;
+  title.textContent = book.title;
   article.appendChild(title);
   const author = document.createElement('p');
-  author.textContent = books[index].author;
+  author.textContent = book.author;
   article.appendChild(author);
-  const button = document.createElement('button');
-  button.classList.add('remove-btn');
-  button.textContent = 'Remove';
-  button.addEventListener('click', () => {
+  const remButton = document.createElement('button');
+  remButton.classList.add('remove-btn');
+  remButton.textContent = 'Remove';
+  remButton.addEventListener('click', () => {
     article.remove();
-    books.splice(index, 1);
-    localStorage.setItem('books', JSON.stringify(books));
+    books.removeBook(book);
+    localStorage.setItem('books', JSON.stringify(books.list));
   });
-  article.appendChild(button);
+  article.appendChild(remButton);
   const hr = document.createElement('hr');
   article.appendChild(hr);
   container.appendChild(article);
 }
 
-function addBook(books, title, author) {
-  if (title !== '' && author !== '') {
-    const book = {
-      title,
-      author,
-    };
-    books.push(book);
-    createArticle(books, books.length - 1);
-    localStorage.setItem('books', JSON.stringify(books));
-  }
-}
-
 function displayBooksList(books) {
-  for (let i = 0; i < books.length; i += 1) {
-    createArticle(books, i);
+  for (let i = 0; i < books.list.length; i += 1) {
+    displayArticle(books.list[i]);
   }
 }
 
-let books = [];
+function createArticle(books, title, author) {
+  if (title !== '' && author !== '') {
+    const book = new Book(title, author);
+    books.addBook(book);
+    displayArticle(book);
+    localStorage.setItem('books', JSON.stringify(books.list));
+  }
+}
 
 const titleIn = document.querySelector('#title');
 const authorIn = document.querySelector('#author');
 const button = document.querySelector('#add-btn');
 
-button.addEventListener('click', () => { addBook(books, titleIn.value, authorIn.value); });
+button.addEventListener('click', () => { createArticle(books, titleIn.value, authorIn.value); });
 
 if (localStorage.getItem('books') !== null) {
   window.addEventListener('load', () => {
-    books = JSON.parse(localStorage.getItem('books'));
+    const storedList = JSON.parse(localStorage.getItem('books'));
+    books.copyList(storedList);
     displayBooksList(books);
   });
 }
